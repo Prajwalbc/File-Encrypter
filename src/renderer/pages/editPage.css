@@ -20,19 +20,36 @@
   flex-direction: column;
 }
 
-.buttons {
-  padding: 16px;
-  display: flex;
-  justify-content: space-evenly;
+.empty-div {
+  margin-right: 30px;
 }
 
-.buttons button {
+.bottom {
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.bottom input {
+  font-size: 18px;
+  outline: none;
+  padding: 8px;
+  border: none;
+  border-radius: 10px;
+}
+
+.bottom button {
+  margin-left: 16px;
+}
+
+button {
+  cursor: pointer;
   font-size: 18px;
   padding: 6px;
   border-radius: 8px;
   font-weight: 400;
   border: none;
-  width: 80px;
+  min-width: 80px;
 }
 
 .text-area {

@@ -13,6 +13,7 @@ import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import fs from 'fs';
+import CryptoJS from 'crypto-js';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
@@ -29,6 +30,23 @@ let mainWindow: BrowserWindow | null = null;
 ipcMain.handle('get-file-data', async (event, filePath) => {
   const data = fs.readFileSync(filePath, 'utf8');
   return data;
+});
+ipcMain.handle('encrypt-file', async (event, filePath, password, data) => {
+  const encryptedData = CryptoJS.AES.encrypt(data, password).toString();
+  fs.writeFile(filePath, encryptedData, () =>
+    console.log('Encryption complete')
+  );
+  return encryptedData;
+});
+ipcMain.handle('decrypt-file', async (event, filePath, password, data) => {
+  const bytes = CryptoJS.AES.decrypt(data, password);
+  const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+
+  fs.writeFile(filePath, decryptedData, () =>
+    console.log('Decryption complete')
+  );
+
+  return decryptedData;
 });
 
 if (process.env.NODE_ENV === 'production') {

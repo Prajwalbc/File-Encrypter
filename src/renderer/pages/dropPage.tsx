@@ -42,9 +42,8 @@ export default function DropPage() {
     const validExtensions = ['text/plain'];
 
     if (validExtensions.includes(fileType)) {
-      const fileData = await window.electron.getFileData(file.path);
       navigate('/edit', {
-        state: { fileName: file.name, filePath: file.path, fileData: fileData },
+        state: { file: file },
       });
     } else {
       console.log(false, 'only .txt supported');

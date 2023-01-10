@@ -1,28 +1,63 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import './editPage.css';
 
 export default function EditPage() {
   const { state } = useLocation();
-  const { fileName, filePath, fileData } = state;
+  const { file } = state;
 
-  const [updatedData, setUpdatedData] = useState(fileData);
+  // const [isEditable, setIsEditable] = useState(false);
+  const [fileInfo, setFileInfo] = useState({ path: '', name: '', data: '' });
+  const [password, setPassword] = useState('');
 
-  function handleTextUpdate(e: any) {
-    setUpdatedData(e.target.value);
+  async function getFileData(filePath: string) {
+    const fileData = await window.electron.getFileData(filePath);
+    setFileInfo({ path: file.path, name: file.name, data: fileData });
   }
+  useEffect(() => {
+    getFileData(file.path);
+  }, []);
 
-  function handleDecryptBtn(e: any) {
+  async function handleDecryptBtn(e: any) {
     e.preventDefault();
+    if (password !== '' && fileInfo.data !== '') {
+      const _data = await window.electron.decryptFile(
+        file.path,
+        password,
+        fileInfo.data
+      );
+      setPassword('');
+      setFileInfo({ ...fileInfo, data: _data });
+    } else {
+      console.log('Enter valid password');
+    }
   }
 
-  function handleEncryptBtn(e: any) {
+  async function handleEncryptBtn(e: any) {
     e.preventDefault();
+    if (password !== '' && fileInfo.data !== '') {
+      const _data = await window.electron.encryptFile(
+        file.path,
+        password,
+        fileInfo.data
+      );
+      setPassword('');
+      setFileInfo({ ...fileInfo, data: _data });
+    } else {
+      console.log('Enter valid password');
+    }
   }
 
-  function handleSaveBtn(e: any) {
-    e.preventDefault();
-  }
+  // function handleEditBtn(e: any) {
+  //   e.preventDefault();
+  // }
+
+  const onPasswordChange = (e: any) => {
+    setPassword(e.target.value);
+  };
+  const onDataChange = (e: any) => {
+    setFileInfo({ ...fileInfo, data: e.target.value });
+  };
 
   return (
     <div>
@@ -34,23 +69,29 @@ export default function EditPage() {
             className="img-icons back-icon"
           />
         </Link>
-        <h2>{fileName}</h2>
-        <div></div>
+        <h2>{file.name}</h2>
+        <div className="empty-div" />
+        {/* <button onClick={(e) => setIsEditable(true)}>Edit</button> */}
       </div>
       <div className="edit-container">
         <textarea
+          // contentEditable={false}
+          value={fileInfo.data || ''}
           className="text-area"
-          defaultValue={updatedData}
           spellCheck={false}
-          onChange={(e) => handleTextUpdate(e)}
+          onChange={(e) => onDataChange(e)}
         ></textarea>
-        <div className="buttons">
-          {fileName.includes('.encrypted') ? (
-            <button onClick={(e) => handleDecryptBtn(e)}>Decrypt</button>
-          ) : (
-            <button onClick={(e) => handleEncryptBtn(e)}>Encrypt</button>
-          )}
-          <button onClick={(e) => handleSaveBtn(e)}>Save</button>
+
+        <div className="bottom">
+          <input
+            value={password || ''}
+            type="text"
+            placeholder="Encryption Password"
+            name=""
+            onChange={(e) => onPasswordChange(e)}
+          />
+          <button onClick={(e) => handleEncryptBtn(e)}>Encrypt</button>
+          <button onClick={(e) => handleDecryptBtn(e)}>Decrypt</button>
         </div>
       </div>
     </div>

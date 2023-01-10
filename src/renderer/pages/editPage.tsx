@@ -45,7 +45,7 @@ export default function EditPage() {
           onChange={(e) => handleTextUpdate(e)}
         ></textarea>
         <div className="buttons">
-          {fileName.includes('encrypted') ? (
+          {fileName.includes('.encrypted') ? (
             <button onClick={(e) => handleDecryptBtn(e)}>Decrypt</button>
           ) : (
             <button onClick={(e) => handleEncryptBtn(e)}>Encrypt</button>

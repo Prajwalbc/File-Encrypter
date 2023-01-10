@@ -15,24 +15,9 @@ export default function DropPage() {
 
   function handleInputOnChange(this: any, e: any) {
     e.preventDefault();
-    file = browseFile.current?.files![0]; //selecting only the first one if multiple is provided
+    file = browseFile.current?.files![0]; // selecting only the first one if multiple is provided
     if (file !== undefined) {
       processFile(file);
-    }
-  }
-
-  async function processFile(file: File) {
-    let fileType: string | undefined = file?.type;
-    let validExtensions = ['text/plain'];
-
-    if (validExtensions.includes(fileType)) {
-      let fileData = await window.electron.getFileData(file.path);
-      navigate('/edit', {
-        state: { fileName: file.name, filePath: file.path, fileData: fileData },
-      });
-    } else {
-      console.log(false, 'only .txt supported');
-      setDragHover(false);
     }
   }
 
@@ -49,6 +34,21 @@ export default function DropPage() {
     file = e.dataTransfer.files[0];
     if (file !== undefined) {
       processFile(file);
+    }
+  }
+
+  async function processFile(file: File) {
+    const fileType: string | undefined = file?.type;
+    const validExtensions = ['text/plain'];
+
+    if (validExtensions.includes(fileType)) {
+      const fileData = await window.electron.getFileData(file.path);
+      navigate('/edit', {
+        state: { fileName: file.name, filePath: file.path, fileData: fileData },
+      });
+    } else {
+      console.log(false, 'only .txt supported');
+      setDragHover(false);
     }
   }
 

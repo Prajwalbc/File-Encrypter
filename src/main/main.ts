@@ -12,9 +12,9 @@ import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import fs from 'fs';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import fs from 'fs';
 
 class AppUpdater {
   constructor() {
@@ -28,7 +28,7 @@ let mainWindow: BrowserWindow | null = null;
 
 ipcMain.handle('get-file-data', async (event, filePath) => {
   const data = fs.readFileSync(filePath, 'utf8');
-  return await data;
+  return data;
 });
 
 if (process.env.NODE_ENV === 'production') {

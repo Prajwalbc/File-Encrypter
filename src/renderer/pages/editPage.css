@@ -1,0 +1,51 @@
+.back-icon {
+  width: 30px;
+  margin-bottom: -2px;
+}
+
+.header h2 {
+  font-size: 24px;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+}
+
+.edit-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.buttons {
+  padding: 16px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.buttons button {
+  font-size: 18px;
+  padding: 6px;
+  border-radius: 8px;
+  font-weight: 400;
+  border: none;
+  width: 80px;
+}
+
+.text-area {
+  width: 670px;
+  height: 470px;
+  border-radius: 10px;
+  font-size: 18px;
+  overflow: hidden;
+  outline: none;
+  border: none;
+  resize: none;
+  padding: 16px;
+  background-color: #ffdee9;
+  background-image: linear-gradient(125deg, #ffdee9 0%, #b5fffc 100%);
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.25);
+}

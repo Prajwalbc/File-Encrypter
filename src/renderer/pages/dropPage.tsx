@@ -5,7 +5,7 @@ import upload_lottie_svg from '../../../assets/upload-icon.json';
 import './dropPage.css';
 
 export default function DropPage() {
-  let file: File | undefined;
+  let droppedFile: File | undefined;
 
   const [dragHover, setDragHover] = useState(false);
 
@@ -15,9 +15,9 @@ export default function DropPage() {
 
   function handleInputOnChange(this: any, e: any) {
     e.preventDefault();
-    file = browseFile.current?.files![0]; // selecting only the first one if multiple is provided
-    if (file !== undefined) {
-      processFile(file);
+    droppedFile = browseFile.current?.files![0]; // selecting only the first one if multiple is provided
+    if (droppedFile !== undefined) {
+      processFile(droppedFile);
     }
   }
 
@@ -31,22 +31,29 @@ export default function DropPage() {
   }
   function handleOnDrop(e: any) {
     e.preventDefault();
-    file = e.dataTransfer.files[0];
-    if (file !== undefined) {
-      processFile(file);
+    droppedFile = e.dataTransfer.files[0];
+    if (droppedFile !== undefined) {
+      processFile(droppedFile);
     }
   }
 
   async function processFile(file: File) {
-    const fileType: string | undefined = file?.type;
-    const validExtensions = ['text/plain'];
+    let fileType: string = file.type;
+    if (file.type === '') {
+      fileType = file.path.slice(
+        file.path.lastIndexOf('.txt.encrypted'),
+        file.path.length
+      );
+    }
+    const validExtensions = ['text/plain', '.txt.encrypted'];
 
     if (validExtensions.includes(fileType)) {
       navigate('/edit', {
         state: { file: file },
       });
     } else {
-      console.log(false, 'only .txt supported');
+      console.log(false, 'only .txt & .txt.encrypted files are supported');
+      console.log(fileType);
       setDragHover(false);
     }
   }
@@ -73,11 +80,14 @@ export default function DropPage() {
           />
           <header>
             {dragHover ? 'Release' : 'Drag & Drop'} file or{' '}
-            <button onClick={(e) => browseFile!.current!.click()}>
+            <button
+              onClick={(e) => browseFile!.current!.click()}
+              style={{ fontWeight: 'bold' }}
+            >
               Browse File
             </button>
           </header>
-          <p>support type: txt</p>
+          <p>support type: .txt, .txt.encrypted</p>
           <input
             ref={browseFile}
             onChange={(e) => handleInputOnChange(e)}

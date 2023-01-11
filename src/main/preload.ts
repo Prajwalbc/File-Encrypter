@@ -4,10 +4,10 @@ import { contextBridge, ipcRenderer } from 'electron';
 
 const electronHandler = {
   getFileData: (path: string) => ipcRenderer.invoke('get-file-data', path),
-  encryptFile: (path: string, password: string, data: string) =>
-    ipcRenderer.invoke('encrypt-file', path, password, data),
-  decryptFile: (path: string, password: string, data: string) =>
-    ipcRenderer.invoke('decrypt-file', path, password, data),
+  saveFile: (path: string, data: string) =>
+    ipcRenderer.invoke('save-file', path, data),
+  saveFileRenamed: (oldPath: string, newPath: string, data: string) =>
+    ipcRenderer.invoke('save-file-renamed', oldPath, newPath, data),
 };
 
 contextBridge.exposeInMainWorld('electron', electronHandler);

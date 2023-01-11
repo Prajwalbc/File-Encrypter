@@ -1,6 +1,7 @@
 import CryptoJS from 'crypto-js';
 import { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import './editPage.css';
 
 export default function EditPage() {
@@ -50,14 +51,18 @@ export default function EditPage() {
           });
           setPassword('');
           setIsEncryptedFile(false);
+          toast.success('Successfully decrypted');
         } else {
-          console.log('wrong password');
+          toast.error('wrong password');
+          // console.log('wrong password');
         }
       } catch (e) {
         console.log(e);
       }
     } else {
-      console.log('Enter valid password or this file is already decrypted');
+      if (password === '') toast.info('Enter valid password');
+      else if (fileInfo.data === '') toast.info('File is empty');
+      // console.log('Enter valid password or this file is already decrypted');
     }
   }
 
@@ -79,8 +84,11 @@ export default function EditPage() {
       });
       setPassword('');
       setIsEncryptedFile(true);
+      toast.success('Successfully Encrypted');
     } else {
-      console.log('Enter valid password or this file is already encrypted');
+      if (password === '') toast.info('Enter valid password');
+      else if (fileInfo.data === '') toast.info('File is empty');
+      // console.log('Enter valid password or this file is already encrypted');
     }
   }
 
@@ -96,7 +104,8 @@ export default function EditPage() {
       );
       setOldFilePath(fileInfo.path);
     }
-    console.log('File saved');
+    toast.success('File saved');
+    // console.log('File saved');
   }
 
   const onPasswordChange = (e: any) => {

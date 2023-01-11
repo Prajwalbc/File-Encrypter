@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Lottie from 'react-lottie-player';
 import upload_lottie_svg from '../../../assets/upload-icon.json';
+import { toast } from 'react-toastify';
 import './dropPage.css';
 
 export default function DropPage() {
@@ -51,10 +52,12 @@ export default function DropPage() {
       navigate('/edit', {
         state: { file: file },
       });
+      toast.success('File dropped successfully');
     } else {
-      console.log(false, 'only .txt & .txt.encrypted files are supported');
-      console.log(fileType);
+      toast.error('Unsupported file type');
       setDragHover(false);
+      // console.log(false, 'only .txt & .txt.encrypted files are supported');
+      // console.log(fileType);
     }
   }
 

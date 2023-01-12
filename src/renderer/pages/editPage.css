@@ -52,12 +52,15 @@ button {
   min-width: 50px;
 }
 
+.text-area::-webkit-scrollbar {
+  display: none;
+}
+
 .text-area {
   width: 670px;
   height: 470px;
   border-radius: 10px;
   font-size: 18px;
-  overflow: hidden;
   outline: none;
   border: none;
   resize: none;

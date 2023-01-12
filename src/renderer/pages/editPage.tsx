@@ -57,12 +57,13 @@ export default function EditPage() {
           // console.log('wrong password');
         }
       } catch (e) {
-        console.log(e);
+        console.log(e, 'wrong password');
+        toast.error('wrong password');
       }
     } else {
       if (password === '') toast.info('Enter valid password');
       else if (fileInfo.data === '') toast.info('File is empty');
-      // console.log('Enter valid password or this file is already decrypted');
+      console.log('Enter valid password or this file is already decrypted');
     }
   }
 
